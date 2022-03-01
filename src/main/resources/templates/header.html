@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>header</title>
+        <!-- Bootstrap core CSS -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+            crossorigin="anonymous"
+        />
+    </head>
+
+    <body>
+        <h1 class="visually-hidden">Modelo de headder adaptado</h1>
+        <nav th:fragment="header" role="navigation">
+            <div class="container">
+                <header
+                    class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom"
+                >
+                    <a
+                        href="/"
+                        class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="40"
+                            height="32"
+                            fill="currentColor"
+                            class="bi bi-book me-2"
+                            viewBox="0 0 16 16"
+                        >
+                            <path
+                                d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"
+                            ></path>
+                        </svg>
+                        <span class="fs-4">Libreria MAF</span>
+                    </a>
+
+                    <ul class="nav nav-pills">
+                        <li class="nav-item visually-hidden">
+                            <a
+                                href="#"
+                                class="nav-link active"
+                                aria-current="page"
+                                >Home</a
+                            >
+                        </li>
+                        <li class="nav-item visually-hidden">
+                            <a href="#" class="nav-link">Features</a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a
+                                class="nav-link dropdown-toggle"
+                                href="#"
+                                id="dropdown03"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                >Libros</a
+                            >
+                            <ul
+                                class="dropdown-menu"
+                                aria-labelledby="dropdown03"
+                            >
+                                <li>
+                                    <a class="dropdown-item" href="/l/form">Cargar</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/l/search">Buscar</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/l"
+                                        >Ver lista</a
+                                    >
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a
+                                class="nav-link dropdown-toggle"
+                                href="#"
+                                id="dropdown03"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                >Autores</a
+                            >
+                            <ul
+                                class="dropdown-menu"
+                                aria-labelledby="dropdown03"
+                            >
+                                <li>
+                                    <a class="dropdown-item" href="/a/form"
+                                        >Cargar</a
+                                    >
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/a/search"
+                                        >Buscar</a
+                                    >
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/a"
+                                        >Ver lista</a
+                                    >
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a
+                                class="nav-link dropdown-toggle"
+                                href="#"
+                                id="dropdown03"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                >Editoriales</a
+                            >
+                            <ul
+                                class="dropdown-menu"
+                                aria-labelledby="dropdown03"
+                            >
+                                <li>
+                                    <a class="dropdown-item" href="/e/form#">Cargar</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/e/search">Buscar</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/e"
+                                        >Ver lista</a
+                                    >
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <!-- Buscador -->
+                    <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                        <input
+                            type="search"
+                            class="form-control form-control-dark"
+                            placeholder="Buscar libro..."
+                            aria-label="Search"
+                        />
+                    </form>
+
+                    <div class="text-end">
+                        <button type="button" class="btn btn-primary me-2">
+                            Ingresar
+                        </button>
+                        <button type="button" class="btn btn-secondary">
+                            Registrarse
+                        </button>
+                    </div>
+                </header>
+            </div>
+
+            <div class="b-example-divider"></div>
+        </nav>
+
+        <!-- Bootstrap core JS -->
+        <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+            integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+            integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+            crossorigin="anonymous"
+        ></script>
+    </body>
+</html>
