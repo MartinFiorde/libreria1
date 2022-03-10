@@ -6,6 +6,7 @@ import edu.libreria.libreria.repositorios.EditorialRepositorio;
 import edu.libreria.libreria.servicios.EditorialServicio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/e")
+@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
 public class EditorialControlador {
 
     private EditorialRepositorio editorialRepositorio;
@@ -56,18 +58,6 @@ public class EditorialControlador {
         return "editorial-t/formulario.html";
     }
 
-    @PostMapping("/activar")
-    public String activar(@RequestParam(required = false) String id) throws ErrorServicio {
-        editorialServicio.reactivar(id);
-        return "redirect:/e";
-    }
-
-    @PostMapping("/desactivar")
-    public String desactivar(@RequestParam(required = false) String id) throws ErrorServicio {
-        editorialServicio.eliminar(id);
-        return "redirect:/e";
-    }
-
     @PostMapping("/form1")
     public String precargarFormEditorial(ModelMap model, @RequestParam(required = false) String id, @RequestParam(required = false) String nombre) {
         model.put("id", id);
@@ -96,6 +86,19 @@ public class EditorialControlador {
         return "redirect:/e";
     }
 
+    @PostMapping("/activar")
+    public String activar(@RequestParam(required = false) String id) throws ErrorServicio {
+        editorialServicio.reactivar(id);
+        return "redirect:/e";
+    }
+
+    @PostMapping("/desactivar")
+    public String desactivar(@RequestParam(required = false) String id) throws ErrorServicio {
+        editorialServicio.eliminar(id);
+        return "redirect:/e";
+    }
+
+    
     @GetMapping("/search")
     public String mostrarBuscadorEditoriales(ModelMap model) {
         return "editorial-t/buscador.html";

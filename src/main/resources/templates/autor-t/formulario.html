@@ -11,7 +11,8 @@
             rel="stylesheet"
             integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
             crossorigin="anonymous"
-        />
+            />
+            <link href="/css/index.css" rel="stylesheet"/>
     </head>
 
     <body style="background-color: beige">
@@ -25,14 +26,14 @@
                 action="ruta del metodo que va a manejar la información"
                 method="POST"
                 enctype="multipart/form-data"
-            ></form>
+                ></form>
 
             <h1>Carga de autor</h1>
             <form
                 th:action="@{/a/form2}"
                 enctype="multipart/form-data"
                 method="POST"
-            >
+                >
                 <input type="hidden" name="id" th:value="${id}" />
                 <input type="text" th:if="${nombre == null}" name="nombre" placeholder="Nombre" />
                 <input type="text" th:if="${nombre != null}" name="nombre" placeholder="Nombre" th:value="${nombre}" />
@@ -47,7 +48,7 @@
                 style="color: red"
                 th:if="${error != null}"
                 th:text="${error}"
-            ></p>
+                ></p>
         </div>
 
         <footer>

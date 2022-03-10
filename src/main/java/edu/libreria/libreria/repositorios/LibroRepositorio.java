@@ -1,6 +1,7 @@
 package edu.libreria.libreria.repositorios;
 
 import edu.libreria.libreria.entidades.Libro;
+import java.math.BigInteger;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,7 +15,7 @@ public interface LibroRepositorio extends JpaRepository<Libro, String> {
     public Libro buscarTituloEqual(@Param("tituloq") String titulo);
 
     @Query("SELECT a FROM Libro a WHERE a.isbn = :isbnq")
-    public Libro buscarIsbnEqual(@Param("isbnq") String isbn);
+    public Libro buscarIsbnEqual(@Param("isbnq") Long isbn);
 
     @Query("SELECT a FROM Libro a WHERE a.titulo LIKE %:tituloq%")
     public List<Libro> buscarTitulosLike(@Param("tituloq") String titulo);
@@ -25,8 +26,8 @@ public interface LibroRepositorio extends JpaRepository<Libro, String> {
     @Query("SELECT a FROM Libro a WHERE a.autor.nombre LIKE %:nombreq%")
     public List<Libro> buscarAutoresLike(@Param("nombreq") String nombre);
 
-    @Query("SELECT a FROM Libro a WHERE a.isbn LIKE %:nombreq%")
-    public List<Libro> buscarIsbnLike(@Param("nombreq") Long isbn);
+    @Query("SELECT a FROM Libro a WHERE a.isbn LIKE :nombreq")
+    public List<Libro> buscarIsbnLike(@Param("nombreq") BigInteger isbn);
 
     @Query("SELECT a FROM Libro a WHERE a.anio LIKE %:nombreq%")
     public List<Libro> buscarAnioLike(@Param("nombreq") Integer anio);

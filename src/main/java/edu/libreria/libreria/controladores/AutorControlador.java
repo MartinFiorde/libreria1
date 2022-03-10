@@ -6,20 +6,19 @@ import edu.libreria.libreria.repositorios.AutorRepositorio;
 import edu.libreria.libreria.servicios.AutorServicio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/a")
+@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 public class AutorControlador {
 
-    
     private AutorRepositorio autorRepositorio;
     private AutorServicio autorServicio;
 
@@ -52,7 +51,7 @@ public class AutorControlador {
         return "autor-t/lista.html";
     }
 
-        @GetMapping("/form")
+    @GetMapping("/form")
     public String mostrarFormAutor(ModelMap model, @RequestParam(required = false) String id, @RequestParam(required = false) String nombre) {
         model.put("id", id);
         model.put("nombre", nombre);
@@ -64,20 +63,20 @@ public class AutorControlador {
         autorServicio.reactivar(id);
         return "redirect:/a";
     }
-    
+
     @PostMapping("/desactivar")
     public String desactivar(@RequestParam(required = false) String id) throws ErrorServicio {
         autorServicio.eliminar(id);
         return "redirect:/a";
     }
-    
+
     @PostMapping("/form1")
     public String precargarFormAutor(ModelMap model, @RequestParam(required = false) String id, @RequestParam(required = false) String nombre) {
         model.put("id", id);
         model.put("nombre", nombre);
         return "autor-t/formulario.html";
     }
-    
+
     @PostMapping("/form2")
     public String guardarFormAutor(ModelMap model, @RequestParam String nombre, @RequestParam String apellido, @RequestParam(required = false) String id) throws ErrorServicio {
         try {

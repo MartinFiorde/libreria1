@@ -11,7 +11,8 @@
             rel="stylesheet"
             integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
             crossorigin="anonymous"
-        />
+            />
+            <link href="/css/index.css" rel="stylesheet"/>
     </head>
 
     <body style="background-color: beige">
@@ -25,25 +26,117 @@
                 action="ruta del metodo que va a manejar la información"
                 method="POST"
                 enctype="multipart/form-data"
-            ></form>
+                ></form>
 
-            <h1>Carga de editorial</h1>
+            <h1>Carga de Libro</h1>
             <form
-                th:action="@{/e/form2}"
+                th:action="@{/l/form2}"
+                th:object="${libro}"
                 enctype="multipart/form-data"
                 method="POST"
-            >
-                <input type="hidden" th:if="${id != null}" name="id" th:value="${id}" />
-                <input type="text" th:if="${nombre != null}" name="nombre" placeholder="Nombre" th:value="${nombre}" />
-                <input type="text" th:if="${nombre == null}" name="nombre" placeholder="Nombre" />
+                >
+                <label for=""></label>
+                <input
+                    type="hidden"
+                    th:if="*{id != null}"
+                    name="id"
+                    th:value="*{id}"
+                    />
+                <br />
+                <label for="">Titulo</label>
+                <br />
+                <input
+                    type="text"
+                    th:field="*{titulo}"
+                    placeholder="Titulo"
+                    th:value="*{titulo}"
+                    />
+                <br />
+                <label for="">ISBN</label>
+                <br />
+                <input
+                    type="number"
+                    th:field="*{isbn}"
+                    placeholder="ISBN"
+                    th:value="*{isbn}"
+                    />
+                <br />
+                <label for="">Año</label>
+                <br />
+                <input
+                    type="number"
+                    th:field="*{anio}"
+                    placeholder="Año"
+                    th:value="*{anio}"
+                    />
+                <br />
+                <label for="">Ejemplares</label>
+                <br />
+                <input
+                    type="number"
+                    th:field="*{ejemplares}"
+                    placeholder="Ejemplares"
+                    th:value="*{ejemplares}"
+                    />
+                <br />
+                <label for="">Prestados</label>
+                <br />
+                <input
+                    type="number"
+                    th:field="*{ejemplaresPrestados}"
+                    placeholder="Ejemplares Prestados"
+                    th:value="*{ejemplaresPrestados}"
+                    />
+                <br />
+                <label for="">Nombre Autor</label>
+                <br />
+                <input
+                    type="text"
+                    name="nombreAutor"
+                    th:if="${id == null}"
+                    placeholder="Autor"
+                    th:value="${nombreAutor}"
+                    />
+                <input
+                    type="text"
+                    name="nombreAutor"
+                    th:if="${id != null}"
+                    placeholder="Autor"
+                    th:value="*{autor.nombre}"
+                    />
+                <br />
+                <label for="">Nombre Editorial</label>
+                <br />
+                <input
+                    type="text"
+                    name="nombreEditorial"
+                    th:if="${id == null}"
+                    placeholder="Editorial"
+                    th:value="${nombreEditorial}"
+                    />
+                <input
+                    type="text"
+                    name="nombreEditorial"
+                    th:if="${id != null}"
+                    placeholder="Editorial"
+                    th:value="*{editorial.nombre}"
+                    />
                 <br />
                 <input type="submit" value="Aceptar" />
             </form>
+            <br />
             <p
                 style="color: red"
                 th:if="${error != null}"
                 th:text="${error}"
-            ></p>
+                ></p>
+            <ul>
+                <li
+                    style="color: red"
+                    th:each="aux : ${opcNombres}"
+                    th:text="${aux}"
+                    ></li>
+            </ul>
         </div>
 
         <footer>

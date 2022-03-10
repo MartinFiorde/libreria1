@@ -4,6 +4,7 @@ import edu.libreria.libreria.entidades.Autor;
 import edu.libreria.libreria.entidades.Editorial;
 import edu.libreria.libreria.errores.ErrorServicio;
 import edu.libreria.libreria.repositorios.EditorialRepositorio;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +23,14 @@ public class EditorialServicio {
     //
     public void registrar(String nombre) throws ErrorServicio {
         Editorial editorial = new Editorial();
-        editorial.setNombre(validarNombre(nombre));
+        editorial.setNombre(validarNombre(nombre, null));
         editorial.setAlta(Boolean.TRUE);
         editorialRepositorio.save(editorial);
     }
 
     public void modificar(String id, String nombre) throws ErrorServicio {
         Editorial editorial = validarId(id);
-        editorial.setNombre(validarNombre(nombre));
+        editorial.setNombre(validarNombre(nombre, id));
         editorialRepositorio.save(editorial);
     }
 
@@ -53,28 +54,43 @@ public class EditorialServicio {
         return res.get();
     }
 
-    public String validarNombre(String nombre) throws ErrorServicio {
-        if (nombre.toLowerCase() == null || nombre.isEmpty() || nombre.trim() == "") {
-            throw new ErrorServicio("Debe ingresar un nombre.");
+    public String validarNombre(String nombre, String id) throws ErrorServicio {
+         if (nombre.toLowerCase() == null || nombre.isEmpty() || nombre.trim().isEmpty()) {
+            throw new ErrorServicio("Debe ingresar un nombre de editorial.");
         }
-        if (editorialRepositorio.buscarNombreEqual(nombre.toLowerCase()) != null) {
+        if (editorialRepositorio.buscarNombreEqual(nombre.toLowerCase()) != null && editorialRepositorio.buscarNombreEqual(nombre.toLowerCase()).getId() != id) {
             throw new ErrorServicio("Ya existe un editorial con el nombre seleccionado.");
         }
         return nombre.toLowerCase();
     }
 
     public Editorial validarExistenciaEditorial(String nombre) throws ErrorServicio {
-
-        if (editorialRepositorio.buscarNombreEqual(nombre.toLowerCase()) == null) {
+        if (nombre.toLowerCase() == null || nombre.isEmpty() || nombre.trim().isEmpty()) {
+            throw new ErrorServicio("Debe ingresar un nombre de editorial.");
+        }
+        if (editorialRepositorio.buscarNombreEqual(nombre.toLowerCase()) != null) {
+            return editorialRepositorio.buscarNombreEqual(nombre.toLowerCase());
+        }
+        if (editorialRepositorio.buscarNombresLike(nombre.toLowerCase()).isEmpty()) {
             throw new ErrorServicio("No existe un editorial con el nombre seleccionado. Por favor ingrese el editorial e intente nuevamente");
+        }
+
+        if (editorialRepositorio.buscarNombresLike(nombre.toLowerCase()).size() == 1) {
+            return editorialRepositorio.buscarNombresLike(nombre.toLowerCase()).get(0);
         }
 
         if (editorialRepositorio.buscarNombresLike(nombre.toLowerCase()).size() > 1 && editorialRepositorio.buscarNombresLike(nombre.toLowerCase()).size() < 11) {
             List<Editorial> editoriales = editorialRepositorio.buscarNombresLike(nombre.toLowerCase());
+            System.out.println("editoriales size: " + editoriales.size());
             String tabOpciones = "Por favor ingrese un editorial de entre las siguientes opciones:";
-            for (Editorial aux : editoriales) {
-                tabOpciones.concat("\n" + aux.getNombre());
-            }
+//            Integer count = 0;
+//            for (Editorial aux : editoriales) {
+//                count += 1;
+//                if (count > 1) {
+//                    tabOpciones = tabOpciones.concat(" - ");
+//                }
+//                tabOpciones = tabOpciones.concat(count + ". " + aux.getNombre());
+//            }
             throw new ErrorServicio(tabOpciones);
         }
 
@@ -85,7 +101,16 @@ public class EditorialServicio {
         return editorialRepositorio.buscarNombreEqual(nombre.toLowerCase());
     }
 
-    
+    public List<String> enviarListaNombres(String nombre) {
+        List<String> nombres = new ArrayList();
+        List<Editorial> editoriales = editorialRepositorio.buscarNombresLike(nombre.toLowerCase());
+        for (Editorial aux : editoriales) {
+            System.out.println(aux.getNombre());
+            nombres.add(aux.getNombre());
+        }
+        return nombres;
+    }
+
     public Editorial buscarNombreEqual(String nombre) {
         return editorialRepositorio.buscarNombreEqual(nombre);
     }

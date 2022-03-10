@@ -3,6 +3,7 @@ package edu.libreria.libreria.servicios;
 import edu.libreria.libreria.entidades.Autor;
 import edu.libreria.libreria.errores.ErrorServicio;
 import edu.libreria.libreria.repositorios.AutorRepositorio;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +19,10 @@ public class AutorServicio {
         this.autorRepositorio = autorRepositorio;
     }
 
-    //
     public void registrar(String nombre, String apellido) throws ErrorServicio {
         Autor autor = new Autor();
         String concat = nombre.concat(" " + apellido);
-        autor.setNombre(validarNombre(concat));
+        autor.setNombre(validarNombre(concat, null));
         autor.setAlta(Boolean.TRUE);
         autorRepositorio.save(autor);
     }
@@ -30,7 +30,7 @@ public class AutorServicio {
     public void modificar(String id, String nombre, String apellido) throws ErrorServicio {
         Autor autor = validarId(id);
         String concat = nombre.concat(" " + apellido);
-        autor.setNombre(validarNombre(concat));
+        autor.setNombre(validarNombre(concat, id));
         autorRepositorio.save(autor);
     }
 
@@ -54,28 +54,43 @@ public class AutorServicio {
         return res.get();
     }
 
-    public String validarNombre(String nombre) throws ErrorServicio {
-        if (nombre.toLowerCase() == null || nombre.isEmpty() || nombre.trim() == "") {
-            throw new ErrorServicio("Debe ingresar un nombre.");
+    public String validarNombre(String nombre, String id) throws ErrorServicio {
+        if (nombre.toLowerCase() == null || nombre.isEmpty() || nombre.trim().isEmpty()) {
+            throw new ErrorServicio("Debe ingresar un nombre de Autor válido.");
         }
-        if (autorRepositorio.buscarNombreEqual(nombre.toLowerCase()) != null) {
+        if (autorRepositorio.buscarNombreEqual(nombre.toLowerCase()) != null && autorRepositorio.buscarNombreEqual(nombre.toLowerCase()).getId() != id) {
             throw new ErrorServicio("Ya existe un autor con el nombre seleccionado.");
         }
         return nombre.toLowerCase();
     }
 
     public Autor validarExistenciaAutor(String nombre) throws ErrorServicio {
+        if (nombre.toLowerCase() == null || nombre.isEmpty() || nombre.trim().isEmpty()) {
+            throw new ErrorServicio("Debe ingresar un nombre de Autor válido.");
+        }
+        if (autorRepositorio.buscarNombreEqual(nombre.toLowerCase()) != null) {
+            return autorRepositorio.buscarNombreEqual(nombre.toLowerCase());
+        }
 
-        if (autorRepositorio.buscarNombreEqual(nombre.toLowerCase()) == null) {
+        if (autorRepositorio.buscarNombresLike(nombre.toLowerCase()).size() == 1) {
+            return autorRepositorio.buscarNombresLike(nombre.toLowerCase()).get(0);
+        }
+
+        if (autorRepositorio.buscarNombresLike(nombre.toLowerCase()).isEmpty()) {
             throw new ErrorServicio("No existe un autor con el nombre seleccionado. Por favor ingrese el autor e intente nuevamente");
         }
 
         if (autorRepositorio.buscarNombresLike(nombre.toLowerCase()).size() > 1 && autorRepositorio.buscarNombresLike(nombre.toLowerCase()).size() < 11) {
             List<Autor> autores = autorRepositorio.buscarNombresLike(nombre.toLowerCase());
             String tabOpciones = "Por favor ingrese un autor de entre las siguientes opciones:";
-            for (Autor aux : autores) {
-                tabOpciones.concat("\n" + aux.getNombre());
-            }
+//            Integer count = 0;
+//            for (Autor aux : autores) {
+//                count += 1;
+//                if (count > 1) {
+//                    tabOpciones = tabOpciones.concat(" - ");
+//                }
+//                tabOpciones = tabOpciones.concat(count + ". " + aux.getNombre());
+//            }
             throw new ErrorServicio(tabOpciones);
         }
 
@@ -84,6 +99,15 @@ public class AutorServicio {
         }
 
         return autorRepositorio.buscarNombreEqual(nombre.toLowerCase());
+    }
+
+    public List<String> enviarListaNombres(String nombre) {
+        List<String> nombres = new ArrayList();
+        List<Autor> autores = autorRepositorio.buscarNombresLike(nombre.toLowerCase());
+        for (Autor aux : autores) {
+            nombres.add(aux.getNombre());
+        }
+        return nombres;
     }
 
     public Autor buscarNombreEqual(String nombre) {
